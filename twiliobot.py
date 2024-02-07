@@ -1,57 +1,21 @@
-# Download the helper library from https://www.twilio.com/docs/python/install
 import os
 from twilio.rest import Client
 from dotenv import load_dotenv
-from flask import Flask, request, Response
-load_dotenv() 
 
-app = Flask(__name__)
+load_dotenv()  # Load environment variables from a .env file
 
+# Find your Account SID and Auth Token at twilio.com/console
+# and set the environment variables. See http://twil.io/secure
 account_sid = os.getenv('ACCOUNT_SID')
 auth_token = os.getenv('AUTH_TOKEN')
+print(account_sid)
+print(auth_token)
 client = Client(account_sid, auth_token)
 
 message = client.messages.create(
-                              from_='+2348172829491',
-                              body='Hello, there!',
-                              to='+14155238886'
-                          )
+         from_='whatsapp:+14348305405',
+         body='Hi, Joe! Thanks for placing an order with us. We’ll let you know once your order has been processed and delivered. Your order number is O12235234. Thanks',
+         to='whatsapp:+2348172829491'
+     )
 
 print(message.sid)
-
-
-def greeting_template(name):
-    return f"Hello {name}, welcome to the Twilio Bot! How can I assist you today?"
-
-def handle_message(message_body):
-    # Parse the incoming message and extract relevant information
-    # Here, we assume a simple "name" parameter in the message
-
-    if "name" in message_body.lower():
-        user_name = message_body.split(":")[1].strip()
-        response = greeting_template(user_name)
-    else:
-        response = "I'm sorry, I didn't understand that. Please provide your name for a personalized greeting."
-
-    return response
-
-
-
-@app.route("/incoming", methods=["POST"])
-def incoming():
-    message_body = request.form.get("Body", "")
-    response = handle_message(message_body)
-
-    message = client.messages.create(
-            from_='+2348172829491',
-            body='Hello, there!',
-            to='+14155238886'
-    )
-
-    return Response(status=200)
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
