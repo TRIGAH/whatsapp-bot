@@ -12,7 +12,7 @@ PHONE_NUMBER_ID=os.getenv('PHONE_NUMBER_ID')
 WHATSAPP_ACCOUNT_ID=os.getenv('WHATSAPP_ACCOUNT_ID')
 RECIPIENT = os.getenv('RECIPIENT')
 
-url="https://graph.facebook.com/v19.0/120359394339429/message_templates?field=name"
+url=f"https://graph.facebook.com/v19.0/{WHATSAPP_ACCOUNT_ID}/message_templates?field=name"
 headers={
     'Authorization':f'Bearer {ACCESS_TOKEN}',
     'Content-Type': 'application/json'
@@ -21,6 +21,7 @@ headers={
 response=requests.get(url,headers=headers)
 
 TEMPLATE_NAME=response.json()['data'][0]['name']
+print(f"------{TEMPLATE_NAME}-----")
 
 async def send_message(data):
   headers = {
